@@ -3,7 +3,7 @@
 
 LiquidCrystal_I2C lcd(0x27, 2,1,0,4,5,6,7,3,POSITIVE);
 
-long minDist=7;
+long minDist=10;
 int buzzer=12;
 
 struct distSensor {
@@ -46,13 +46,12 @@ void loop() {
   Serial.println();
   if (isTooClose())
   {
-    digitalWrite(buzzer, HIGH);
+    ringBuzzerFor(getMinDist());
   }
   else
   {
     digitalWrite(buzzer, LOW);
   }
-  delay(500);
 }
 
 long getDistanceForSensor(distSensor ds)
@@ -85,5 +84,29 @@ int isTooClose()
   }
   return 0;
 }
+
+void ringBuzzerFor(long dist)
+{
+  int ringDuration=dist/minDist*1000;
+  digitalWrite(buzzer, HIGH);
+  delay(150);
+  digitalWrite(buzzer, LOW);
+  delay(ringDuration);
+}
+
+
+long getMinDist()
+{
+  long minDist=getDistanceForSensor(ds[0]);
+  for(int i=1;i<4;i++)
+  {
+    if (minDist>getDistanceForSensor(ds[i]))
+    {
+      minDist=getDistanceForSensor(ds[i]);  
+    }
+  }
+  return minDist;
+}
+
 
 
