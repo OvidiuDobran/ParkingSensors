@@ -1,3 +1,7 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27, 2,1,0,4,5,6,7,3,POSITIVE);
 
 long minDist=7;
 int buzzer=12;
@@ -24,6 +28,10 @@ void setup() {
     pinMode(ds[i].trigPin, OUTPUT); // Sets the trigPin as an Output
     pinMode(ds[i].echoPin, INPUT); // Sets the echoPin as an Input
   }
+
+  lcd.begin(16,2);
+  lcd.clear();
+  lcd.print("hello, world");
   Serial.begin(9600); // Starts the serial communication
 }
 
